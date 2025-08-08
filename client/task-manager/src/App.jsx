@@ -3,6 +3,8 @@ import {
   BrowserRouter as  Router,
   Routes,
   Route,
+  Outlet,
+  Navigate
 } from 'react-router-dom';
 
 // admin components 
@@ -19,9 +21,13 @@ import MyTasks from './pages/User/MyTasks';
 import ViewTaskDetalis from './pages/User/ViewTaskDetalis';
 
 import PrivateRoute from './routes/PrivateRoute';
+import UserProvider from './context/userContext';
+import { useContext } from 'react';
+import { UserContext } from './context/userContext';
 
 function App() {
   return (
+    <UserProvider>
     <div>
     <Router>
       <Routes>
@@ -42,10 +48,26 @@ function App() {
           <Route path="/user/tasks" element={<MyTasks />} />
           <Route path="/user/task-detalis/:id" element={<ViewTaskDetalis />} />
         </Route>
+
+        {/* Default Route */}
+        <Route path="/" element={<Root />} />
       </Routes>
     </Router>
-    </div>      
+    </div>
+    </UserProvider>      
   );
 }
 
 export default App
+
+const Root = () => {
+  const { user, loading } = useContext(UserContext);
+
+  if (loading) return <Outlet />; // Show a loading state while fetching user data
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return user.role === 'admin' ? <Navigate to="/admin/dashboard" replace/> : <Navigate to="/user/dashboard" replace/>;
+};

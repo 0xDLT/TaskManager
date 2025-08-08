@@ -3,13 +3,17 @@ import AuthLayout from '../../components/layouts/AuthLayout';
 import { useNavigate, Link } from 'react-router-dom';
 import Input from "../../components/inputs/input";
 import {validateEmail} from '../../utils/helper'
-
+import axiosInstance from '../../utils/axiosinstance';
+import { API_PATHS } from '../../utils/apiPaths';
+import { UserContext } from '../../context/userContext';
+import { useContext } from 'react';
 
 function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
 
+    const { updateUser } = useContext(UserContext);
     const navigate = useNavigate();
 
     //handle login from submit 
@@ -29,8 +33,35 @@ function Login() {
       setError("");
 
       //login api call
+      try{
+        const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, {
+          email,
+          password,
+        });
 
+        const { token, role } = response.data;
+
+        if (token){
+          localStorage.setItem("token", token);
+          updateUser(response.data)
+
+          //Redirect based on user role
+          if (role === "admin") {
+            navigate("/admin/dashboard");
+          }
+          else if (role === "user") {
+            navigate("/user/dashboard");
+          }
+        }
+      }catch(error) {
+        if(error.response && error.response.data.message) {
+          setError(error.response.data.message);
+        } else { 
+          setError("An error occurred. Please try again.");
+        }
     };
+  };
+
   return (
     <AuthLayout>
       <div className='lg:w-[70%] h-3/4 md:h-full flex flex-col justify-center'>
@@ -68,7 +99,7 @@ function Login() {
       </form>
       </div>
     </AuthLayout>
-  );
+    );
 }
 
-export default Login
+export default Login;
