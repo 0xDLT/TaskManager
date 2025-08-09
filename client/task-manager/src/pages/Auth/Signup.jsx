@@ -4,6 +4,11 @@ import ProfilePhotoSelector from '../../components/Inputs/ProfilePhotoSelector';
 import Input from '../../components/inputs/input';
 import { useNavigate, Link } from 'react-router-dom';
 import { validateEmail } from '../../utils/helper';
+import axiosInstance from '../../utils/axiosinstance';
+import { API_PATHS } from '../../utils/apiPaths';
+import { UserContext } from '../../context/userContext';
+import { useContext } from 'react';
+import uploadImage from '../../utils/uploadimage';
 
 function Signup() {
   const [profilePic, setProfilePic] = useState(null);
@@ -14,11 +19,16 @@ function Signup() {
 
 
   const [error, setError] = useState(null);
+
+  const { updateUser } = useContext(UserContext);
+  const navigate = useNavigate(); 
   
   //Handle Signup Form Submit 
   const handleSignUp = async(e) => {
         e.preventDefault();
-  
+
+        let profileImageUrl = '';
+
         if (!fullName) {
           setError("Please Enter Full Name.");
           return;
@@ -37,8 +47,44 @@ function Signup() {
         setError("");
   
         //signup api call
-  
-      };
+        try{
+          //upload profile image if selected
+          if (profilePic) {
+            const imgUploadRes = await uploadImage(profilePic);
+            console.log("Image upload response:", imgUploadRes);
+            profileImageUrl = imgUploadRes.imageUrl || '';
+          }
+
+          const response = await axiosInstance.post(API_PATHS.AUTH.REGISTER, {
+            name: fullName,
+            email,
+            password,
+            adminInviteToken,
+            profileImageUrl,
+          });
+
+          const { token, role } = response.data;
+
+          if (token){
+            localStorage.setItem("token", token);
+            updateUser(response.data);
+
+            //Redirect based on user role
+            if (role === "admin") {
+              navigate("/admin/dashboard");
+            } else if (role === "user") {
+              navigate("/user/dashboard");
+            }
+          }
+        }catch(error) {
+        if(error.response && error.response.data.message) {
+          setError(error.response.data.message);
+        } else { 
+          setError("An error occurred. Please try again.");
+        }
+      }
+    }
+
   return (
     <AuthLayout>
       <div className='lg:w-[100%] h-auto md:h-full mt-10 md:mt-0 flex flex-col justify-center'>
@@ -74,8 +120,8 @@ function Signup() {
             />
 
             <Input  
-              value={password} 
-              onChange={({target}) => setPassword(target.value)}
+              value={adminInviteToken} 
+              onChange={({target}) => setAdminInviteToken(target.value)}
               label="Admin Invite Token"
               placeholder='6 Digit Code'
               type='text'
@@ -96,7 +142,7 @@ function Signup() {
         </form>
       </div>
     </AuthLayout>
-  );
+    );
 }
 
 export default Signup
