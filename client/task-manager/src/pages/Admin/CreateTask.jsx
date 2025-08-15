@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import DashboardLayout from '../../components/layouts/DashboardLayout';
 import { PRIORITY_DATA } from '../../utils/data';
-import axiosinstance from "../../utils/axiosinstance";
+import axiosInstance from "../../utils/axiosinstance";
 import { API_PATHS } from '../../utils/apiPaths';
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -50,9 +50,66 @@ function CreateTask() {
     });
   };
 
-  const createTask = async () => { };
+  const createTask = async () => {
+    setLoading(true);
+
+    try {
+      const todolist = taskData.todoChecklist?.map((item) => ({
+        text: item,
+        completed: false,
+      }));
+
+      const response = await axiosInstance.post(API_PATHS.TASKS.CREATE_TASK, {
+        ...taskData,
+        dueDate: new Date(taskData.dueDate).toISOString(),
+        todoChecklist: todolist,
+      });
+
+      toast.success("Task Created Successfuly");
+
+      clearData()
+    } catch (error) {
+      console.error("Error creating task", error);
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  };
   const updateTask = async () => { };
-  const handleSubmit = async () => { };
+  const handleSubmit = async () => {
+    setError(null);
+
+    //input valdiation
+    if (!taskData.title.trim()) {
+      setError("Title is required")
+      return;
+    }
+    if (!taskData.description.trim()) {
+      setError("Description is required");
+      return;
+    }
+    if (!taskData.dueDate) {
+      setError("Due date is required");
+      return;
+    }
+
+    if (taskData.assignedTo?.length === 0) {
+      setError("task not assigned to any member");
+      return;
+    }
+
+    if (taskData.todoChecklist?.length === 0) {
+      setError("add at least one todo task");
+      return;
+    }
+
+    if (taskId) {
+      updateTask();
+      return;
+    }
+
+    createTask();
+  };
   const getTaskDetailsByID = async () => { };
   const deleteTask = async () => { };
 
