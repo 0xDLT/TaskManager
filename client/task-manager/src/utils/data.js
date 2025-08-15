@@ -68,6 +68,6 @@ export const PRIORITY_DATA = [
 
 export const STATUS_DATA = [
     {label: 'Pending', value: 'Pending'},
-    {label: 'In Progress', value: 'In-progress'},
+    {label: 'In Progress', value: 'inProgress'},
     {label: 'Done', value: 'Done'},
 ];

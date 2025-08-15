@@ -48,7 +48,7 @@ const getTasks = async (req, res) => {
 
         const inProgressTasks = await Task.countDocuments({
             ...filter,
-            status: 'In-progress',
+            status: 'inProgress',
             ...(req.user.role !== 'admin' && { assignedTo: req.user._id })
         });
 
@@ -223,9 +223,9 @@ const updateTaskChecklist = async (req, res) => {
         if (task.progress === 100) {
             task.status = 'Done';
         } else if (task.status === 'Done') {
-            task.status = 'In-progress'; // Reset status if not all items are completed
+            task.status = 'inProgress'; // Reset status if not all items are completed
         }else {
-            task.status = 'In-progress'; // Ensure status is in-progress if not done
+            task.status = 'inProgress'; // Ensure status is in-progress if not done
         }
 
         await task.save();
@@ -248,14 +248,14 @@ const getDashboardData = async (req, res) => {
         const totalTasks = await Task.countDocuments();
         const pendingTasks = await Task.countDocuments({ status: 'Pending' });
         const completedTasks = await Task.countDocuments({ status: 'Done' });
-        const inProgressTasks = await Task.countDocuments({ status: 'In-progress' });
+        const inProgressTasks = await Task.countDocuments({ status: 'inProgress' });
         const overdueTasks = await Task.countDocuments({
             dueDate: { $lt: new Date() },
             status: { $ne: 'Done' } // Exclude completed tasks
         });
 
         // Ensure all possible statuses are included
-        const taskStatues = ["Pending", "In-progress", "Done", "overdue"];
+        const taskStatues = ["Pending", "inProgress", "Done", "overdue"];
         const taskDistributionRaw = await Task.aggregate([
             {
                 $group: {
@@ -329,7 +329,7 @@ const getUserDashboardData = async (req, res) => {
         
         const inProgressTasks = await Task.countDocuments({
             assignedTo: userId,
-            status: 'In-progress'
+            status: 'inProgress'
         });
         
         const completedTasks = await Task.countDocuments({
@@ -343,7 +343,7 @@ const getUserDashboardData = async (req, res) => {
         });
 
         //task distribution by status
-        const taskStatues = ["Pending", "In-progress", "Done", "overdue"];
+        const taskStatues = ["Pending", "inProgress", "Done", "overdue"];
         const taskDistributionRaw = await Task.aggregate([
             {$match: { assignedTo: userId } },// Filter by assigned user
             {$group: { _id: "$status", count: { $sum: 1 } } },
