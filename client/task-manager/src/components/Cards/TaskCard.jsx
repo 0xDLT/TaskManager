@@ -61,7 +61,7 @@ const TaskCard = ({
 
             {/* Main Content */}
             <div
-                className={`px-4 border-l-[3px] ${status === "In Progress"
+                className={`px-4 border-l-[3px] ${status === "inProgress"
                     ? "border-cyan-500"
                     : status === "Done"
                         ? "border-lime-500"

@@ -27,7 +27,7 @@ export const SIDE_MENU_DATA = [
     },
     {
         id: "04",
-        label: 'Team Memebers',
+        label: 'Team Members',
         icon: LuUsers,
         path: '/admin/users',
     },
