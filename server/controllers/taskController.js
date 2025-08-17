@@ -219,13 +219,12 @@ const updateTaskChecklist = async (req, res) => {
         const totalCount = task.todoChecklist.length;
         task.progress = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
-        //auto-mark task as done if all checklist items are completed
-        if (task.progress === 100) {
+        if (task.progress === 0) {
+            task.status = 'Pending';
+        } else if (task.progress === 100) {
             task.status = 'Done';
-        } else if (task.status === 'Done') {
-            task.status = 'inProgress'; // Reset status if not all items are completed
-        }else {
-            task.status = 'inProgress'; // Ensure status is in-progress if not done
+        } else {
+            task.status = 'inProgress';
         }
 
         await task.save();
