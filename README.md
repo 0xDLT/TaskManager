@@ -4,7 +4,7 @@
 
 | Please Visit! | Backend | Frontend |
 |---------------|---------|----------|
-| Links here 👉 | [Backend Link](http://localhost:8000) | [Frontend Link](http://localhost:3000) |
+| Links here 👉 | [Backend Link](server/README.md) | [Frontend Link](client/task-manager/README.md) |
 
 ## ScreenShoots
 
