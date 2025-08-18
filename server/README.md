@@ -6,7 +6,7 @@
   <div>
     <p><b>1.</b> Rename file <code>.env.example</code> to <code>.env</code></p>
     <p><b>2.</b> Put your MongoDB URL</p>
-    <p><b>3.</b> Run code:</p>
+    <p><b>3.</b> Run code in your terminal to genrate JWT:</p>
     <pre><code>node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"</code></pre>
   </div>
   <div>
