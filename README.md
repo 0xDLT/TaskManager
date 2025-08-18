@@ -2,9 +2,9 @@
 
 ## install
 
-Please Visit!
--For [Backend](server/README.md)
--For [Frontend](client/task-manager/README.md)
+| Please Visit! | Backend | Frontend |
+|---------------|---------|----------|
+| Links here 👉 | [Backend Link](http://localhost:8000) | [Frontend Link](http://localhost:3000) |
 
 ## ScreenShoots
 
