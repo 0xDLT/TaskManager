@@ -29,12 +29,7 @@ npm install
 npm run dev
 ```
 
--localhost:
-
-```bash
-http://localhost:800/
-```
 
 ## Profile picture
 
-all profile picutre will be uploaded in your upload forlder `server/uploads` and every profile picture has its own URL
+all profile picutre will be uploaded in your upload folder `server/uploads` and every profile picture has its own URL
