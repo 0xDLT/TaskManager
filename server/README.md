@@ -2,11 +2,19 @@
 
 ## env file
 
-1- Rename file '.env.exmaple' to '.env'
-2- Put your mongo database URL 
-3- Run the code `node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"` to genrate a JWT
-4- Put your admin invite token manuly for exmaple `ADMIN_INVITE_TOKEN=123`
-5- Put `PORT = 800` (optional)
+<div style="display:flex; gap:20px;">
+  <div>
+    <p><b>1.</b> Rename file <code>.env.example</code> to <code>.env</code></p>
+    <p><b>2.</b> Put your MongoDB URL</p>
+    <p><b>3.</b> Run code:</p>
+    <pre><code>node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"</code></pre>
+  </div>
+  <div>
+    <p><b>4.</b> Put your admin invite token manually</p>
+    <pre><code>ADMIN_INVITE_TOKEN=123</code></pre>
+    <p><b>5.</b> (Optional) Put <code>PORT=800</code></p>
+  </div>
+</div>
 
 ## install
 
